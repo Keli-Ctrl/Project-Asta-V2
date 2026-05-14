@@ -1,7 +1,7 @@
 # Project Asta: Security Best Practices
 
 ## 1. API Key Management
-- **Never Hardcode Secrets**: All API keys (MetaApi, Claude, Database passwords) must be stored in environment variables or a secure secret manager (e.g., AWS Secrets Manager, HashiCorp Vault).
+- **Never Hardcode Secrets**: All API keys (MetaApi, Gemini, Database passwords) must be stored in environment variables or a secure secret manager (e.g., AWS Secrets Manager, HashiCorp Vault).
 - **Encryption at Rest**: Sensitive data in the database (if any) should be encrypted.
 - **Environment Isolation**: Use separate keys for Development, Staging, and Production environments.
 

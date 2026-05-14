@@ -62,7 +62,7 @@ graph TD
 - **Data Validation**: Pydantic v2
 - **ORM**: SQLAlchemy 2.0 (Async)
 - **AI/ML**: 
-    - Anthropic Claude API (Reasoning)
+    - Google Gemini API (Reasoning)
     - Scikit-learn / XGBoost (Regime Detection)
     - Pandas / NumPy (Technical Analysis)
 - **Frontend**: React, TypeScript, Tailwind CSS, TradingView Lightweight Charts.
@@ -204,7 +204,7 @@ Filters every trade signal before execution:
 - [ ] Real-time position synchronization.
 
 ### Phase 3: AI & Analytics (Weeks 5-6)
-- [ ] AI Reasoning Layer integration (Claude API).
+- [ ] AI Reasoning Layer integration (Gemini API).
 - [ ] Performance metrics calculation engine.
 - [ ] Dashboard MVP (Live trades & Equity curve).
 
