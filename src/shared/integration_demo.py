@@ -90,11 +90,11 @@ async def run_integration_demo():
     risk_manager = RiskManager(config={
         "max_exposure_per_symbol": 0.05, 
         "default_lot_size": 0.1,
-        "max_drawdraw_limit": 0.1
+        "max_drawdown_limit": 0.1
     })
 
     # 4. Setup AI Reasoning Layer
-    logger.info("Step 4: Initializing AI Reasoning Layer (Anthropic Claude)...")
+    logger.info("Step 4: Initializing AI Reasoning Layer (Google Gemini)...")
     # Note: AI Layer will return default reasoning if API key is not present
     ai_layer = AIReasoningLayer()
 

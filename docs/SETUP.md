@@ -9,7 +9,7 @@ Before starting, ensure you have the following installed:
 - **Python 3.11+**: (Required for manual/local development)
 - **Node.js 18+ & npm**: (Required for manual frontend development)
 - **MetaApi Token**: Obtain from [MetaApi.cloud](https://metaapi.cloud/)
-- **Anthropic API Key**: Obtain from [Anthropic Console](https://console.anthropic.com/) (for AI Reasoning Layer)
+- **Google Gemini API Key**: Obtain from [Google AI Studio](https://aistudio.google.com/app/apikey) (for AI Reasoning Layer)
 
 ---
 
@@ -22,7 +22,7 @@ Before starting, ensure you have the following installed:
    ```
 3. Open `.env` and configure the following variables:
    - `METAAPI_TOKEN`: Your MetaApi cloud token.
-   - `ANTHROPIC_API_KEY`: Your Anthropic API key.
+   - `GEMINI_API_KEY`: Your Google Gemini API key.
    - `DATABASE_URL`: If running locally, set to `postgresql+asyncpg://user:pass@localhost:5432/asta`.
    - `REDIS_URL`: If running locally, set to `redis://localhost:6379/0`.
 
@@ -102,4 +102,4 @@ Regardless of the deployment method, you must run the database migrations to cre
 
 - **MetaApi Connectivity**: Ensure your `METAAPI_TOKEN` is valid and the account ID used in strategies is correctly provisioned in your MetaApi dashboard.
 - **Database Connection**: If running manual deployment, ensure PostgreSQL is running and the user/password in `.env` match your local setup.
-- **AI Layer**: If the AI Reasoning Layer fails, check your `ANTHROPIC_API_KEY`. The system will fallback to a confidence multiplier of 0.5 if the AI layer is disabled.
+- **AI Layer**: If the AI Reasoning Layer fails, check your `GEMINI_API_KEY`. The system will fallback to a confidence multiplier of 0.5 if the AI layer is disabled.

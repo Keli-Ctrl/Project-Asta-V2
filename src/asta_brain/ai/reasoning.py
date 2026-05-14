@@ -1,21 +1,24 @@
 import os
+import json
 from typing import Dict, Any, Optional
-from anthropic import AsyncAnthropic
+import google.generativeai as genai
 from loguru import logger
-from asta_brain.infrastructure.schemas.market import OHLCV
-from asta_brain.infrastructure.schemas.trade import TradeSide
+from src.asta_brain.infrastructure.schemas.market import OHLCV
+from src.asta_brain.infrastructure.schemas.trade import TradeSide
 
 class AIReasoningLayer:
     """
-    Augments strategy signals with market reasoning using Anthropic's Claude.
+    Augments strategy signals with market reasoning using Google's Gemini.
     """
     def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv("ANTHROPIC_API_KEY")
+        self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            logger.warning("ANTHROPIC_API_KEY not found. AI Reasoning Layer will be disabled.")
-            self.client = None
+            logger.warning("GEMINI_API_KEY not found. AI Reasoning Layer will be disabled.")
+            self.model = None
         else:
-            self.client = AsyncAnthropic(api_key=self.api_key)
+            genai.configure(api_key=self.api_key)
+            # Use gemini-1.5-flash for faster response and lower latency
+            self.model = genai.GenerativeModel('gemini-1.5-flash')
 
     async def analyze_signal(
         self, 
@@ -27,7 +30,7 @@ class AIReasoningLayer:
         """
         Takes a signal and market context, returns confidence and reasoning.
         """
-        if not self.client:
+        if not self.model:
             return {"confidence_multiplier": 1.0, "reasoning": "AI Layer disabled (no API key)"}
 
         try:
@@ -54,22 +57,24 @@ class AIReasoningLayer:
             1. Provide a confidence multiplier (0.0 to 1.0) for this trade based on the context.
             2. Provide a brief professional reasoning for your decision.
             
-            Respond strictly in JSON format:
+            Respond strictly in JSON format without markdown code blocks:
             {{
                 "confidence_multiplier": float,
                 "reasoning": "string"
             }}
             """
 
-            response = await self.client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=300,
-                messages=[{"role": "user", "content": prompt}]
-            )
+            # Use generate_content_async for async support
+            response = await self.model.generate_content_async(prompt)
             
-            # Basic parsing (in production, use a more robust parser/pydantic)
-            import json
-            result = json.loads(response.content[0].text)
+            # Extract text and handle potential markdown blocks
+            response_text = response.text.strip()
+            if response_text.startswith("```json"):
+                response_text = response_text[7:-3].strip()
+            elif response_text.startswith("```"):
+                response_text = response_text[3:-3].strip()
+                
+            result = json.loads(response_text)
             logger.info(f"AI Reasoning for {symbol} {side}: {result['confidence_multiplier']} - {result['reasoning']}")
             return result
 
